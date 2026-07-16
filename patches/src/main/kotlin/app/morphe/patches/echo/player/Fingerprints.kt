@@ -10,15 +10,8 @@ import com.android.tools.smali.dexlib2.Opcode
  */
 internal object PlayerBackgroundAssignmentFingerprint : Fingerprint(
     strings = listOf("playerBackgroundStyle"),
-    filters = OpcodesFilter.opcodesToFilters(
-        Opcode.CONST_STRING,
-        Opcode.SGET_OBJECT,
-        Opcode.INVOKE_STATIC,
-        Opcode.MOVE_RESULT_OBJECT,
-        Opcode.IF_EQZ,
-        Opcode.SGET_OBJECT,
-        Opcode.GOTO,
-    ),
+    // Use only string matching, no strict opcode filters (R8 obfuscation changes bytecode)
+    filters = emptyList()
 )
 
 /**
@@ -26,12 +19,6 @@ internal object PlayerBackgroundAssignmentFingerprint : Fingerprint(
  * Targets the bottom sheet color assignment with isLocalMedia -> Black pattern.
  */
 internal object BottomSheetBackgroundFingerprint : Fingerprint(
-    strings = listOf("bottomSheet"),
-    filters = OpcodesFilter.opcodesToFilters(
-        Opcode.IGET_OBJECT,
-        Opcode.IGET_BOOLEAN,
-        Opcode.IF_EQZ,
-        Opcode.CONST_WIDE_HIGH16,
-        Opcode.IPUT_OBJECT,
-    ),
+    strings = listOf("bottomSheet", "background"),
+    filters = emptyList()
 )
