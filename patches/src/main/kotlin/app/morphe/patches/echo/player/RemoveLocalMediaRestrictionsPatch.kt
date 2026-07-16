@@ -1,9 +1,6 @@
 package app.morphe.patches.echo.player
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.indexOfFirstInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.indexOfFirstInstructionOrThrow
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.echo.shared.Constants
 import com.android.tools.smali.dexlib2.Opcode
@@ -20,35 +17,25 @@ val removeLocalMediaRestrictionsPatch = bytecodePatch(
 
     execute {
         PlayerBackgroundAssignmentFingerprint.method.apply {
-            val enumSgetIndex = indexOfFirstInstruction {
-                opcode == Opcode.SGET_OBJECT
-            }
+            val enumSgetIndex = indexOfFirstInstructionOrThrow(Opcode.SGET_OBJECT)
 
-            if (enumSgetIndex >= 0) {
-                addInstructions(
-                    enumSgetIndex,
-                    """
-                        invoke-static { }, $EXTENSION_CLASS->overridePlayerBackground()V
-                    """.trimIndent()
-                )
-            }
+            addInstructions(
+                enumSgetIndex,
+                """
+                    invoke-static { }, $EXTENSION_CLASS->overridePlayerBackground()V
+                """.trimIndent()
+            )
         }
 
         BottomSheetBackgroundFingerprint.method.apply {
-            val insertIndex = indexOfFirstInstructionOrThrow {
-                opcode == Opcode.IPUT_OBJECT ||
-                    opcode == Opcode.IPUT_BOOLEAN ||
-                    opcode == Opcode.IPUT
-            }
+            val insertIndex = indexOfFirstInstructionOrThrow(Opcode.IPUT_OBJECT)
 
-            if (insertIndex >= 0) {
-                addInstructions(
-                    insertIndex,
-                    """
-                        invoke-static { }, $EXTENSION_CLASS->overrideBottomSheetBackground()V
-                    """.trimIndent()
-                )
-            }
+            addInstructions(
+                insertIndex,
+                """
+                    invoke-static { }, $EXTENSION_CLASS->overrideBottomSheetBackground()V
+                """.trimIndent()
+            )
         }
     }
 }
