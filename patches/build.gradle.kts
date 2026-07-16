@@ -1,12 +1,11 @@
-group = "app.template"
+group = "app.amaho"
 
 patches {
-    // TODO: Update this section with your project details.
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
+        name = "Amaho Echo Patches"
+        description = "Patches for Echo Music"
+        source = "git@github.com:amaho-arch/morphe-patches.git"
+        author = "amaho-arch"
         contact = "na"
         website = "na"
         license = "GPLv3"
