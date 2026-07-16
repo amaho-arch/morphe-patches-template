@@ -34,6 +34,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build patches
+        run: ./gradlew :patches:buildAndroid --no-daemon
+
+      - name: Upload mpp artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: patches-mpp
+          path: patches/build/libs/patches-*.mpp
+
       # Semantic release runs its own Gradle build command.
       # Only dev and main branch will generate a release as specified by .releaserc
       - name: Release
