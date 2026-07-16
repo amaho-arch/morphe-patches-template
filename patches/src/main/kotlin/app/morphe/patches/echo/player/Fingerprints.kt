@@ -6,10 +6,10 @@ import com.android.tools.smali.dexlib2.Opcode
 
 /**
  * Fingerprint to find the method that assigns the player background style.
- * The string "playerBackgroundStyle" is the preference key and survives obfuscation.
+ * Targets the method that checks isLocalMedia and returns DEFAULT or preference.
  */
 internal object PlayerBackgroundAssignmentFingerprint : Fingerprint(
-    strings = listOf("playerBackgroundStyle"),
+    strings = listOf("Background", "Style", "DEFAULT", "GRADIENT", "playerBackground"),
     // Use only string matching, no strict opcode filters (R8 obfuscation changes bytecode)
     filters = emptyList()
 )
@@ -19,6 +19,6 @@ internal object PlayerBackgroundAssignmentFingerprint : Fingerprint(
  * Targets the bottom sheet color assignment with isLocalMedia -> Black pattern.
  */
 internal object BottomSheetBackgroundFingerprint : Fingerprint(
-    strings = listOf("bottomSheet", "background"),
+    strings = listOf("BottomSheet", "bottomSheet", "background", "Color", "Black"),
     filters = emptyList()
 )
