@@ -1,6 +1,7 @@
 package app.morphe.patches.echo.player
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.echo.shared.Constants
 import com.android.tools.smali.dexlib2.Opcode
@@ -16,26 +17,31 @@ val removeLocalMediaRestrictionsPatch = bytecodePatch(
     compatibleWith(Constants.COMPATIBILITY_ECHO_MUSIC)
 
     execute {
-        PlayerBackgroundAssignmentFingerprint.method.apply {
-            val enumSgetIndex = indexOfFirstInstructionOrThrow(Opcode.SGET_OBJECT)
-
-            addInstructions(
-                enumSgetIndex,
-                """
-                    invoke-static { }, $EXTENSION_CLASS->overridePlayerBackground()V
-                """.trimIndent()
-            )
+        // Use the instruction matches from the fingerprint
+        val playerBackgroundMatches = PlayerBackgroundAssignmentFingerprint.instructionMatches
+        if (playerBackgroundMatches.isNotEmpty()) {
+            val enumSgetIndex = playerBackgroundMatches.first().index
+            PlayerBackgroundAssignmentFingerprint.method.apply {
+                addInstructions(
+                    enumSgetIndex,
+                    """
+                        invoke-static { }, $EXTENSION_CLASS->overridePlayerBackground()V
+                    """.trimIndent()
+                )
+            }
         }
 
-        BottomSheetBackgroundFingerprint.method.apply {
-            val insertIndex = indexOfFirstInstructionOrThrow(Opcode.IPUT_OBJECT)
-
-            addInstructions(
-                insertIndex,
-                """
-                    invoke-static { }, $EXTENSION_CLASS->overrideBottomSheetBackground()V
-                """.trimIndent()
-            )
+        val bottomSheetMatches = BottomSheetBackgroundFingerprint.instructionMatches
+        if (bottomSheetMatches.isNotEmpty()) {
+            val insertIndex = bottomSheetMatches.first().index
+            BottomSheetBackgroundFingerprint.method.apply {
+                addInstructions(
+                    insertIndex,
+                    """
+                        invoke-static { }, $EXTENSION_CLASS->overrideBottomSheetBackground()V
+                    """.trimIndent()
+                )
+            }
         }
     }
 }
