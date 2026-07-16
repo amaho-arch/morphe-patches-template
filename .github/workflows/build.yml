@@ -36,8 +36,8 @@ jobs:
       - name: Build patches
         run: ./gradlew :patches:buildAndroid --no-daemon
         env:
-          GPR_USER: ${{ github.actor }}
-          GPR_KEY: ${{ secrets.GITHUB_TOKEN }}
+          GPR_USER: ${{ secrets.GPR_USER }}
+          GPR_KEY: ${{ secrets.GPR_KEY }}
 
       - name: Upload mpp artifact
         uses: actions/upload-artifact@v4
